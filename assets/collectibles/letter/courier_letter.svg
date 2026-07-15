@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="36" height="26" viewBox="0 0 36 26" shape-rendering="crispEdges">
+  <!-- Original 36x26 pixel-art collectible for Express "Ginger Tail". -->
+  <path fill="#161b36" d="M2 2h32v22H2z"/>
+  <path fill="#f8e8bd" d="M4 4h28v18H4z"/>
+  <path fill="#d5b36d" d="M4 4h28v2H4zM4 20h28v2H4zM4 4h2v18H4zM30 4h2v18h-2z"/>
+  <path fill="#c56a3c" d="M5 6l13 10L31 6v3L18 19 5 9z"/>
+  <path fill="#fff7d5" d="M7 7h22L18 15z"/>
+  <path fill="#d48745" d="M16 16h4v4h-4z"/>
+  <path fill="#772d42" d="M17 17h2v2h-2z"/>
+</svg>

@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scripts/main_menu.gd" id="1_menu"]
+[ext_resource type="Texture2D" path="res://assets/environment/central_city/Buildings.png" id="2_city_buildings"]
+[ext_resource type="Texture2D" path="res://assets/characters/cat/free_cat_2d_pixel_art/Sprites/RUN.png" id="3_cat_run"]
+[ext_resource type="Texture2D" path="res://assets/environment/moon/free_moon_pixel_backgrounds/moon_blue.png" id="4_moon"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -21,13 +24,42 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.035, 0.055, 0.13, 1)
 
-[node name="Moon" type="ColorRect" parent="."]
+[node name="CitySilhouetteLeft" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(250, 495)
+scale = Vector2(1.8, 1.8)
+modulate = Color(0.36, 0.3, 0.65, 0.34)
+texture = ExtResource("2_city_buildings")
+
+[node name="CitySilhouetteRight" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(940, 510)
+scale = Vector2(1.5, 1.5)
+modulate = Color(0.32, 0.26, 0.58, 0.36)
+texture = ExtResource("2_city_buildings")
+
+[node name="Moon" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(910, 155)
+scale = Vector2(0.86, 0.86)
+texture = ExtResource("4_moon")
+
+[node name="CourierRoof" type="ColorRect" parent="."]
 layout_mode = 0
-offset_left = 850.0
-offset_top = 90.0
-offset_right = 970.0
-offset_bottom = 210.0
-color = Color(1, 0.89, 0.58, 1)
+offset_left = 784.0
+offset_top = 507.0
+offset_right = 1084.0
+offset_bottom = 519.0
+color = Color(0.25, 0.29, 0.44, 1)
+
+[node name="CourierCat" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(886, 473)
+scale = Vector2(1.35, 1.35)
+flip_h = true
+texture = ExtResource("3_cat_run")
+region_enabled = true
+region_rect = Rect2(0, 0, 80, 64)
 
 [node name="Content" type="VBoxContainer" parent="."]
 layout_mode = 0

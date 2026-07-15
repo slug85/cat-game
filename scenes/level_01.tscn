@@ -4,6 +4,17 @@
 [ext_resource type="Script" uid="uid://7abpcspedoij" path="res://scripts/player.gd" id="2_player"]
 [ext_resource type="Script" uid="uid://h4dgac7bgn1p" path="res://scripts/collectible.gd" id="3_collectible"]
 [ext_resource type="Script" uid="uid://dnbt0m4ywq176" path="res://scripts/player_animation.gd" id="4_player_animation"]
+[ext_resource type="Texture2D" path="res://assets/environment/central_city/Buildings.png" id="5_city_buildings"]
+[ext_resource type="Texture2D" path="res://assets/environment/central_city/Background Props.png" id="6_city_props"]
+[ext_resource type="Script" path="res://scripts/central_city_art.gd" id="7_city_art"]
+[ext_resource type="Script" path="res://scripts/fish_animation.gd" id="8_fish_animation"]
+[ext_resource type="AudioStream" path="res://assets/audio/music/cybertracks_vol_1/Track01.ogg" id="9_music"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/jdsherbert_ultimate_ui/JDSherbert - Ultimate UI SFX Pack - Select - 1.ogg" id="10_letter_sound"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/jdsherbert_ultimate_ui/JDSherbert - Ultimate UI SFX Pack - Popup Open - 1.ogg" id="11_fish_sound"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/jdsherbert_ultimate_ui/JDSherbert - Ultimate UI SFX Pack - Error - 1.ogg" id="12_damage_sound"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/jdsherbert_ultimate_ui/JDSherbert - Ultimate UI SFX Pack - Cancel - 1.ogg" id="13_obstacle_sound"]
+[ext_resource type="Texture2D" path="res://assets/collectibles/letter/courier_letter.svg" id="14_letter"]
+[ext_resource type="Script" path="res://scripts/letter_animation.gd" id="15_letter_animation"]
 
 [sub_resource type="RectangleShape2D" id="RoofShapeLong"]
 size = Vector2(1000, 80)
@@ -20,14 +31,14 @@ size = Vector2(40, 44)
 [sub_resource type="RectangleShape2D" id="ObstacleShape"]
 size = Vector2(54, 80)
 
-[sub_resource type="RectangleShape2D" id="PuddleShape"]
+[sub_resource type="RectangleShape2D" id="VentShape"]
 size = Vector2(112, 24)
 
 [sub_resource type="RectangleShape2D" id="CollectibleShape"]
 size = Vector2(36, 26)
 
 [sub_resource type="RectangleShape2D" id="FishShape"]
-size = Vector2(44, 26)
+size = Vector2(38, 54)
 
 [sub_resource type="RectangleShape2D" id="FinishShape"]
 size = Vector2(36, 260)
@@ -44,11 +55,39 @@ offset_right = 1152.0
 offset_bottom = 648.0
 color = Color(0.025, 0.05, 0.13, 1)
 
-[node name="Horizon" type="ColorRect" parent="Background" unique_id=1616766204]
+[node name="CityGlow" type="ColorRect" parent="Background" unique_id=1616766204]
 offset_top = 360.0
 offset_right = 1152.0
 offset_bottom = 648.0
-color = Color(0.07, 0.1, 0.22, 1)
+color = Color(0.12, 0.08, 0.24, 1)
+
+[node name="CityBuildingsLeft" type="Sprite2D" parent="Background"]
+texture_filter = 1
+position = Vector2(260, 400)
+scale = Vector2(2, 2)
+modulate = Color(0.62, 0.54, 0.95, 0.62)
+texture = ExtResource("5_city_buildings")
+
+[node name="CityBuildingsCenter" type="Sprite2D" parent="Background"]
+texture_filter = 1
+position = Vector2(700, 385)
+scale = Vector2(2.1, 2.1)
+modulate = Color(0.5, 0.45, 0.84, 0.7)
+texture = ExtResource("5_city_buildings")
+
+[node name="CityBuildingsRight" type="Sprite2D" parent="Background"]
+texture_filter = 1
+position = Vector2(1080, 405)
+scale = Vector2(1.8, 1.8)
+modulate = Color(0.4, 0.38, 0.75, 0.52)
+texture = ExtResource("5_city_buildings")
+
+[node name="CityForegroundProps" type="Sprite2D" parent="Background"]
+texture_filter = 1
+position = Vector2(1000, 440)
+scale = Vector2(2, 2)
+modulate = Color(0.72, 0.58, 1, 0.72)
+texture = ExtResource("6_city_props")
 
 [node name="RoofStart" type="StaticBody2D" parent="." unique_id=1225398770]
 position = Vector2(500, 560)
@@ -80,6 +119,10 @@ polygon = PackedVector2Array(-460, -40, 460, -40, 460, 40, -460, 40)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RoofEnd" unique_id=1701804267]
 shape = SubResource("RoofShapeEnd")
 
+[node name="CentralCityArt" type="Node2D" parent="."]
+process_mode = 1
+script = ExtResource("7_city_art")
+
 [node name="Player" type="CharacterBody2D" parent="." unique_id=846778430]
 position = Vector2(150, 480)
 script = ExtResource("2_player")
@@ -102,53 +145,60 @@ limit_bottom = 648
 position_smoothing_enabled = true
 position_smoothing_speed = 6.0
 
-[node name="Obstacle" type="StaticBody2D" parent="." unique_id=547566337]
+[node name="Obstacle" type="StaticBody2D" parent="." groups=["solid_obstacles"] unique_id=547566337]
 position = Vector2(780, 480)
 
 [node name="Visual" type="Polygon2D" parent="Obstacle" unique_id=538634190]
+visible = false
 color = Color(0.88, 0.32, 0.23, 1)
 polygon = PackedVector2Array(-27, -40, 27, -40, 27, 40, -27, 40)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Obstacle" unique_id=1725543337]
+position = Vector2(0, 22)
 shape = SubResource("ObstacleShape")
 
-[node name="DamagePuddle" type="Area2D" parent="." unique_id=214183658]
+[node name="DamageVent" type="Area2D" parent="." unique_id=214183658]
 position = Vector2(1840, 508)
 
-[node name="Visual" type="Polygon2D" parent="DamagePuddle" unique_id=1626521738]
+[node name="Visual" type="Polygon2D" parent="DamageVent" unique_id=1626521738]
+visible = false
 color = Color(0.83, 0.16, 0.25, 1)
 polygon = PackedVector2Array(-56, -12, 56, -12, 72, 0, 56, 12, -56, 12, -72, 0)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="DamagePuddle" unique_id=1629940487]
-shape = SubResource("PuddleShape")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DamageVent" unique_id=1629940487]
+shape = SubResource("VentShape")
 
-[node name="DamagePuddle02" type="Area2D" parent="." unique_id=879185023]
+[node name="DamageVent02" type="Area2D" parent="." unique_id=879185023]
 position = Vector2(2540, 508)
 
-[node name="Visual" type="Polygon2D" parent="DamagePuddle02" unique_id=1901706206]
+[node name="Visual" type="Polygon2D" parent="DamageVent02" unique_id=1901706206]
+visible = false
 color = Color(0.83, 0.16, 0.25, 1)
 polygon = PackedVector2Array(-56, -12, 56, -12, 72, 0, 56, 12, -56, 12, -72, 0)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="DamagePuddle02" unique_id=1293440891]
-shape = SubResource("PuddleShape")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DamageVent02" unique_id=1293440891]
+shape = SubResource("VentShape")
 
-[node name="DamagePuddle03" type="Area2D" parent="." unique_id=676360316]
+[node name="DamageVent03" type="Area2D" parent="." unique_id=676360316]
 position = Vector2(2890, 508)
 
-[node name="Visual" type="Polygon2D" parent="DamagePuddle03" unique_id=1090673989]
+[node name="Visual" type="Polygon2D" parent="DamageVent03" unique_id=1090673989]
+visible = false
 color = Color(0.83, 0.16, 0.25, 1)
 polygon = PackedVector2Array(-56, -12, 56, -12, 72, 0, 56, 12, -56, 12, -72, 0)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="DamagePuddle03" unique_id=652662083]
-shape = SubResource("PuddleShape")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DamageVent03" unique_id=652662083]
+shape = SubResource("VentShape")
 
 [node name="Letter01" type="Area2D" parent="." unique_id=1696717969]
 position = Vector2(410, 458)
 script = ExtResource("3_collectible")
 
-[node name="Visual" type="Polygon2D" parent="Letter01" unique_id=1373872195]
-color = Color(1, 0.84, 0.24, 1)
-polygon = PackedVector2Array(-18, -13, 18, -13, 18, 13, -18, 13)
+[node name="Visual" type="Sprite2D" parent="Letter01" unique_id=1373872195]
+process_mode = 1
+texture_filter = 1
+texture = ExtResource("14_letter")
+script = ExtResource("15_letter_animation")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Letter01" unique_id=7095850]
 shape = SubResource("CollectibleShape")
@@ -157,9 +207,11 @@ shape = SubResource("CollectibleShape")
 position = Vector2(920, 458)
 script = ExtResource("3_collectible")
 
-[node name="Visual" type="Polygon2D" parent="Letter02" unique_id=2114531610]
-color = Color(1, 0.84, 0.24, 1)
-polygon = PackedVector2Array(-18, -13, 18, -13, 18, 13, -18, 13)
+[node name="Visual" type="Sprite2D" parent="Letter02" unique_id=2114531610]
+process_mode = 1
+texture_filter = 1
+texture = ExtResource("14_letter")
+script = ExtResource("15_letter_animation")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Letter02" unique_id=1719091695]
 shape = SubResource("CollectibleShape")
@@ -168,9 +220,11 @@ shape = SubResource("CollectibleShape")
 position = Vector2(1420, 458)
 script = ExtResource("3_collectible")
 
-[node name="Visual" type="Polygon2D" parent="Letter03" unique_id=755255017]
-color = Color(1, 0.84, 0.24, 1)
-polygon = PackedVector2Array(-18, -13, 18, -13, 18, 13, -18, 13)
+[node name="Visual" type="Sprite2D" parent="Letter03" unique_id=755255017]
+process_mode = 1
+texture_filter = 1
+texture = ExtResource("14_letter")
+script = ExtResource("15_letter_animation")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Letter03" unique_id=962721342]
 shape = SubResource("CollectibleShape")
@@ -179,9 +233,11 @@ shape = SubResource("CollectibleShape")
 position = Vector2(1740, 458)
 script = ExtResource("3_collectible")
 
-[node name="Visual" type="Polygon2D" parent="Letter04" unique_id=2079673235]
-color = Color(1, 0.84, 0.24, 1)
-polygon = PackedVector2Array(-18, -13, 18, -13, 18, 13, -18, 13)
+[node name="Visual" type="Sprite2D" parent="Letter04" unique_id=2079673235]
+process_mode = 1
+texture_filter = 1
+texture = ExtResource("14_letter")
+script = ExtResource("15_letter_animation")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Letter04" unique_id=1498616099]
 shape = SubResource("CollectibleShape")
@@ -190,9 +246,11 @@ shape = SubResource("CollectibleShape")
 position = Vector2(2080, 458)
 script = ExtResource("3_collectible")
 
-[node name="Visual" type="Polygon2D" parent="Letter05" unique_id=477640447]
-color = Color(1, 0.84, 0.24, 1)
-polygon = PackedVector2Array(-18, -13, 18, -13, 18, 13, -18, 13)
+[node name="Visual" type="Sprite2D" parent="Letter05" unique_id=477640447]
+process_mode = 1
+texture_filter = 1
+texture = ExtResource("14_letter")
+script = ExtResource("15_letter_animation")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Letter05" unique_id=406887139]
 shape = SubResource("CollectibleShape")
@@ -201,33 +259,39 @@ shape = SubResource("CollectibleShape")
 position = Vector2(2700, 458)
 script = ExtResource("3_collectible")
 
-[node name="Visual" type="Polygon2D" parent="Letter06" unique_id=1375647574]
-color = Color(1, 0.84, 0.24, 1)
-polygon = PackedVector2Array(-18, -13, 18, -13, 18, 13, -18, 13)
+[node name="Visual" type="Sprite2D" parent="Letter06" unique_id=1375647574]
+process_mode = 1
+texture_filter = 1
+texture = ExtResource("14_letter")
+script = ExtResource("15_letter_animation")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Letter06" unique_id=1854199750]
 shape = SubResource("CollectibleShape")
 
 [node name="Fish01" type="Area2D" parent="." unique_id=336957646]
-position = Vector2(2390, 458)
+position = Vector2(2390, 442)
 script = ExtResource("3_collectible")
 collectible_type = "fish"
 
-[node name="Visual" type="Polygon2D" parent="Fish01" unique_id=1399980693]
-color = Color(0.28, 0.88, 0.93, 1)
-polygon = PackedVector2Array(-22, 0, -8, -13, 12, -10, 22, 0, 12, 10, -8, 13)
+[node name="Visual" type="Sprite2D" parent="Fish01" unique_id=1399980693]
+process_mode = 1
+texture_filter = 1
+scale = Vector2(0.35, 0.35)
+script = ExtResource("8_fish_animation")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Fish01" unique_id=367016545]
 shape = SubResource("FishShape")
 
 [node name="Fish02" type="Area2D" parent="." unique_id=1405311842]
-position = Vector2(2800, 458)
+position = Vector2(2800, 442)
 script = ExtResource("3_collectible")
 collectible_type = "fish"
 
-[node name="Visual" type="Polygon2D" parent="Fish02" unique_id=2045590172]
-color = Color(0.28, 0.88, 0.93, 1)
-polygon = PackedVector2Array(-22, 0, -8, -13, 12, -10, 22, 0, 12, 10, -8, 13)
+[node name="Visual" type="Sprite2D" parent="Fish02" unique_id=2045590172]
+process_mode = 1
+texture_filter = 1
+scale = Vector2(0.35, 0.35)
+script = ExtResource("8_fish_animation")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Fish02" unique_id=812750762]
 shape = SubResource("FishShape")
@@ -236,11 +300,37 @@ shape = SubResource("FishShape")
 position = Vector2(3000, 410)
 
 [node name="Visual" type="Polygon2D" parent="FinishZone" unique_id=28981850]
+visible = false
 color = Color(0.3, 0.9, 0.48, 1)
 polygon = PackedVector2Array(-18, -130, 18, -130, 18, 130, -18, 130)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="FinishZone" unique_id=1133976915]
 shape = SubResource("FinishShape")
+
+[node name="LevelMusic" type="AudioStreamPlayer" parent="."]
+process_mode = 1
+stream = ExtResource("9_music")
+volume_db = -5.0
+
+[node name="LetterSound" type="AudioStreamPlayer" parent="."]
+process_mode = 1
+stream = ExtResource("10_letter_sound")
+volume_db = -7.0
+
+[node name="FishSound" type="AudioStreamPlayer" parent="."]
+process_mode = 1
+stream = ExtResource("11_fish_sound")
+volume_db = -7.0
+
+[node name="DamageSound" type="AudioStreamPlayer" parent="."]
+process_mode = 1
+stream = ExtResource("12_damage_sound")
+volume_db = -4.0
+
+[node name="ObstacleSound" type="AudioStreamPlayer" parent="."]
+process_mode = 1
+stream = ExtResource("13_obstacle_sound")
+volume_db = -6.0
 
 [node name="Interface" type="CanvasLayer" parent="." unique_id=843953350]
 layer = 2
@@ -306,7 +396,7 @@ offset_right = 962.0
 offset_bottom = 150.0
 theme_override_colors/font_color = Color(0.82, 0.9, 1, 1)
 theme_override_font_sizes/font_size = 18
-text = "Собирайте письма • Рыбки лечат • Лужи отнимают сердце"
+text = "Собирайте письма • Рыбки лечат • Пар из люков обжигает"
 horizontal_alignment = 1
 
 [node name="PausePanel" type="PanelContainer" parent="Interface" unique_id=1778848182]

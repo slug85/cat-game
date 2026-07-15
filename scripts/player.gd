@@ -6,6 +6,7 @@ class_name RunnerPlayer
 
 signal health_changed(current_health: int, max_health: int)
 signal defeated
+signal obstacle_hit(obstacle: Node2D)
 
 @export var run_speed := 280.0
 @export var jump_velocity := -470.0
@@ -18,6 +19,7 @@ signal defeated
 
 var current_health := 3
 var invulnerability_remaining := 0.0
+var obstacle_hit_cooldown := 0.0
 
 
 func _ready() -> void:
@@ -26,6 +28,7 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	_update_invulnerability(delta)
+	obstacle_hit_cooldown = maxf(0.0, obstacle_hit_cooldown - delta)
 	var was_on_floor := is_on_floor()
 	velocity.x = run_speed
 
@@ -39,6 +42,7 @@ func _physics_process(delta: float) -> void:
 		velocity.y = jump_velocity
 
 	move_and_slide()
+	_report_obstacle_hit()
 
 	if is_on_floor() and not was_on_floor:
 		DebugLog.event("LAND", "x=%.0f" % global_position.x)
@@ -85,3 +89,15 @@ func _update_invulnerability(delta: float) -> void:
 	visual.visible = int(invulnerability_remaining * 14.0) % 2 == 0
 	if invulnerability_remaining == 0.0:
 		visual.visible = true
+
+
+func _report_obstacle_hit() -> void:
+	if obstacle_hit_cooldown > 0.0:
+		return
+
+	for collision_index: int in get_slide_collision_count():
+		var collider := get_slide_collision(collision_index).get_collider()
+		if collider is Node2D and collider.is_in_group("solid_obstacles"):
+			obstacle_hit_cooldown = 0.35
+			obstacle_hit.emit(collider)
+			return

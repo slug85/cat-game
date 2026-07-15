@@ -6,7 +6,7 @@ const FALL_Y := 760.0
 
 @onready var player: RunnerPlayer = $Player
 @onready var finish_zone: Area2D = $FinishZone
-@onready var damage_puddles: Array[Area2D] = [$DamagePuddle, $DamagePuddle02, $DamagePuddle03]
+@onready var damage_vents: Array[Area2D] = [$DamageVent, $DamageVent02, $DamageVent03]
 @onready var timer_label: Label = %TimerLabel
 @onready var hearts_label: Label = %HeartsLabel
 @onready var letters_label: Label = %LettersLabel
@@ -21,6 +21,11 @@ const FALL_Y := 760.0
 @onready var result_details: Label = %ResultDetails
 @onready var retry_button: Button = %RetryButton
 @onready var menu_button: Button = %MenuButton
+@onready var level_music: AudioStreamPlayer = $LevelMusic
+@onready var letter_sound: AudioStreamPlayer = $LetterSound
+@onready var fish_sound: AudioStreamPlayer = $FishSound
+@onready var damage_sound: AudioStreamPlayer = $DamageSound
+@onready var obstacle_sound: AudioStreamPlayer = $ObstacleSound
 
 var elapsed_seconds := 0.0
 var is_run_active := true
@@ -33,10 +38,14 @@ var damage_feedback_remaining := 0.0
 
 func _ready() -> void:
 	finish_zone.body_entered.connect(_on_finish_zone_body_entered)
-	for puddle: Area2D in damage_puddles:
-		puddle.body_entered.connect(_on_damage_puddle_body_entered.bind(puddle))
+	for vent: Area2D in damage_vents:
+		vent.body_entered.connect(_on_damage_vent_body_entered.bind(vent))
 	player.health_changed.connect(_on_player_health_changed)
 	player.defeated.connect(_on_player_defeated)
+	player.obstacle_hit.connect(_on_player_obstacle_hit)
+	level_music.finished.connect(level_music.play)
+	level_music.play()
+	DebugLog.event("AUDIO", "music=Track01 volume_db=%.1f" % level_music.volume_db)
 	retry_button.pressed.connect(_on_retry_pressed)
 	menu_button.pressed.connect(_on_menu_pressed)
 	resume_button.pressed.connect(_on_resume_pressed)
@@ -80,12 +89,13 @@ func _on_finish_zone_body_entered(body: Node2D) -> void:
 		_end_run(true)
 
 
-func _on_damage_puddle_body_entered(body: Node2D, puddle: Area2D) -> void:
+func _on_damage_vent_body_entered(body: Node2D, vent: Area2D) -> void:
 	if not is_run_active or body != player:
 		return
 
 	if player.take_damage():
-		DebugLog.event("DAMAGE", "source=%s hearts=%d/%d x=%.0f" % [puddle.name, player.current_health, player.max_health, player.global_position.x])
+		damage_sound.play()
+		DebugLog.event("DAMAGE", "source=%s hearts=%d/%d x=%.0f" % [vent.name, player.current_health, player.max_health, player.global_position.x])
 		_show_damage_feedback()
 
 
@@ -96,6 +106,14 @@ func _on_player_health_changed(current_health: int, max_health: int) -> void:
 func _on_player_defeated() -> void:
 	if is_run_active:
 		_end_run(false, "health")
+
+
+func _on_player_obstacle_hit(obstacle: Node2D) -> void:
+	if not is_run_active:
+		return
+
+	obstacle_sound.play()
+	DebugLog.event("OBSTACLE_HIT", "source=%s x=%.0f" % [obstacle.name, player.global_position.x])
 
 
 func _connect_collectibles() -> void:
@@ -111,10 +129,12 @@ func _on_collectible_collected(collectible: RunnerCollectible) -> void:
 	if collectible.collectible_type == "letter":
 		letters_collected += collectible.amount
 		_update_letters_label()
+		letter_sound.play()
 		DebugLog.event("COLLECT", "type=letter total=%d/%d x=%.0f" % [letters_collected, total_letters, collectible.global_position.x])
 	elif collectible.collectible_type == "fish":
 		fish_collected += collectible.amount
 		var restored: int = player.heal(collectible.amount)
+		fish_sound.play()
 		DebugLog.event("HEAL", "type=fish restored=%d hearts=%d/%d x=%.0f" % [restored, player.current_health, player.max_health, collectible.global_position.x])
 
 
