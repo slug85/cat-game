@@ -6,11 +6,12 @@ const FALL_Y := 760.0
 
 @onready var player: RunnerPlayer = $Player
 @onready var finish_zone: Area2D = $FinishZone
-@onready var damage_puddle: Area2D = $DamagePuddle
+@onready var damage_puddles: Array[Area2D] = [$DamagePuddle, $DamagePuddle02, $DamagePuddle03]
 @onready var timer_label: Label = %TimerLabel
 @onready var hearts_label: Label = %HeartsLabel
 @onready var letters_label: Label = %LettersLabel
 @onready var damage_label: Label = %DamageLabel
+@onready var hint_label: Label = %HintLabel
 @onready var result_panel: PanelContainer = %ResultPanel
 @onready var result_title: Label = %ResultTitle
 @onready var result_details: Label = %ResultDetails
@@ -26,7 +27,8 @@ var damage_feedback_remaining := 0.0
 
 func _ready() -> void:
 	finish_zone.body_entered.connect(_on_finish_zone_body_entered)
-	damage_puddle.body_entered.connect(_on_damage_puddle_body_entered)
+	for puddle: Area2D in damage_puddles:
+		puddle.body_entered.connect(_on_damage_puddle_body_entered.bind(puddle))
 	player.health_changed.connect(_on_player_health_changed)
 	player.defeated.connect(_on_player_defeated)
 	retry_button.pressed.connect(_on_retry_pressed)
@@ -46,6 +48,8 @@ func _process(delta: float) -> void:
 
 	elapsed_seconds += delta
 	_update_timer_label()
+	if player.global_position.x > 650.0:
+		hint_label.hide()
 	if player.global_position.y > FALL_Y:
 		_end_run(false, "fall")
 
@@ -56,12 +60,12 @@ func _on_finish_zone_body_entered(body: Node2D) -> void:
 		_end_run(true)
 
 
-func _on_damage_puddle_body_entered(body: Node2D) -> void:
+func _on_damage_puddle_body_entered(body: Node2D, puddle: Area2D) -> void:
 	if not is_run_active or body != player:
 		return
 
 	if player.take_damage():
-		DebugLog.event("DAMAGE", "source=puddle hearts=%d/%d x=%.0f" % [player.current_health, player.max_health, player.global_position.x])
+		DebugLog.event("DAMAGE", "source=%s hearts=%d/%d x=%.0f" % [puddle.name, player.current_health, player.max_health, player.global_position.x])
 		_show_damage_feedback()
 
 

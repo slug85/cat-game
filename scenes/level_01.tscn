@@ -115,6 +115,26 @@ polygon = PackedVector2Array(-56, -12, 56, -12, 72, 0, 56, 12, -56, 12, -72, 0)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DamagePuddle" unique_id=1629940487]
 shape = SubResource("PuddleShape")
 
+[node name="DamagePuddle02" type="Area2D" parent="."]
+position = Vector2(2540, 508)
+
+[node name="Visual" type="Polygon2D" parent="DamagePuddle02"]
+color = Color(0.83, 0.16, 0.25, 1)
+polygon = PackedVector2Array(-56, -12, 56, -12, 72, 0, 56, 12, -56, 12, -72, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DamagePuddle02"]
+shape = SubResource("PuddleShape")
+
+[node name="DamagePuddle03" type="Area2D" parent="."]
+position = Vector2(2890, 508)
+
+[node name="Visual" type="Polygon2D" parent="DamagePuddle03"]
+color = Color(0.83, 0.16, 0.25, 1)
+polygon = PackedVector2Array(-56, -12, 56, -12, 72, 0, 56, 12, -56, 12, -72, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DamagePuddle03"]
+shape = SubResource("PuddleShape")
+
 [node name="Letter01" type="Area2D" parent="." unique_id=1696717969]
 position = Vector2(410, 458)
 script = ExtResource("3_collectible")
@@ -270,6 +290,17 @@ offset_bottom = 84.0
 theme_override_colors/font_color = Color(0.65, 0.72, 0.9, 1)
 theme_override_font_sizes/font_size = 16
 text = "Space / ↑ — прыжок • ↓ — быстрое снижение"
+
+[node name="HintLabel" type="Label" parent="Interface"]
+unique_name_in_owner = true
+offset_left = 190.0
+offset_top = 110.0
+offset_right = 962.0
+offset_bottom = 150.0
+theme_override_colors/font_color = Color(0.82, 0.9, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "Собирайте письма • Рыбки лечат • Лужи отнимают сердце"
+horizontal_alignment = 1
 
 [node name="ResultPanel" type="PanelContainer" parent="Interface" unique_id=948698151]
 unique_name_in_owner = true
