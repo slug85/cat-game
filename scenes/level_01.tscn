@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene format=3 uid="uid://c818w4vd56xuk"]
 
-[ext_resource type="Script" path="res://scripts/level_01.gd" id="1_level"]
-[ext_resource type="Script" path="res://scripts/player.gd" id="2_player"]
+[ext_resource type="Script" uid="uid://d2nb1d1rldevr" path="res://scripts/level_01.gd" id="1_level"]
+[ext_resource type="Script" uid="uid://7abpcspedoij" path="res://scripts/player.gd" id="2_player"]
+[ext_resource type="Script" uid="uid://h4dgac7bgn1p" path="res://scripts/collectible.gd" id="3_collectible"]
 
 [sub_resource type="RectangleShape2D" id="RoofShapeLong"]
 size = Vector2(1000, 80)
@@ -18,100 +19,206 @@ radius = 22.0
 [sub_resource type="RectangleShape2D" id="ObstacleShape"]
 size = Vector2(54, 80)
 
+[sub_resource type="RectangleShape2D" id="PuddleShape"]
+size = Vector2(112, 24)
+
+[sub_resource type="CircleShape2D" id="CollectibleShape"]
+radius = 18.0
+
 [sub_resource type="RectangleShape2D" id="FinishShape"]
 size = Vector2(36, 260)
 
-[node name="Level01" type="Node2D"]
+[node name="Level01" type="Node2D" unique_id=421862357]
 script = ExtResource("1_level")
 
-[node name="Background" type="CanvasLayer" parent="."]
+[node name="Background" type="CanvasLayer" parent="." unique_id=377721313]
 layer = -1
 
-[node name="Sky" type="ColorRect" parent="Background"]
+[node name="Sky" type="ColorRect" parent="Background" unique_id=979155621]
 offset_right = 1152.0
 offset_bottom = 648.0
 color = Color(0.025, 0.05, 0.13, 1)
 
-[node name="Horizon" type="ColorRect" parent="Background"]
+[node name="Horizon" type="ColorRect" parent="Background" unique_id=1616766204]
 offset_top = 360.0
 offset_right = 1152.0
 offset_bottom = 648.0
 color = Color(0.07, 0.1, 0.22, 1)
 
-[node name="RoofStart" type="StaticBody2D" parent="."]
+[node name="RoofStart" type="StaticBody2D" parent="." unique_id=1225398770]
 position = Vector2(500, 560)
 
-[node name="Visual" type="Polygon2D" parent="RoofStart"]
-polygon = PackedVector2Array(-500, -40, 500, -40, 500, 40, -500, 40)
+[node name="Visual" type="Polygon2D" parent="RoofStart" unique_id=475863054]
 color = Color(0.21, 0.25, 0.34, 1)
+polygon = PackedVector2Array(-500, -40, 500, -40, 500, 40, -500, 40)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RoofStart"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RoofStart" unique_id=1641387439]
 shape = SubResource("RoofShapeLong")
 
-[node name="RoofMiddle" type="StaticBody2D" parent="."]
+[node name="RoofMiddle" type="StaticBody2D" parent="." unique_id=1556087532]
 position = Vector2(1650, 560)
 
-[node name="Visual" type="Polygon2D" parent="RoofMiddle"]
-polygon = PackedVector2Array(-450, -40, 450, -40, 450, 40, -450, 40)
+[node name="Visual" type="Polygon2D" parent="RoofMiddle" unique_id=1521858127]
 color = Color(0.25, 0.29, 0.4, 1)
+polygon = PackedVector2Array(-450, -40, 450, -40, 450, 40, -450, 40)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RoofMiddle"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RoofMiddle" unique_id=671111047]
 shape = SubResource("RoofShapeMedium")
 
-[node name="RoofEnd" type="StaticBody2D" parent="."]
+[node name="RoofEnd" type="StaticBody2D" parent="." unique_id=244515489]
 position = Vector2(2700, 560)
 
-[node name="Visual" type="Polygon2D" parent="RoofEnd"]
-polygon = PackedVector2Array(-460, -40, 460, -40, 460, 40, -460, 40)
+[node name="Visual" type="Polygon2D" parent="RoofEnd" unique_id=1642691476]
 color = Color(0.21, 0.25, 0.34, 1)
+polygon = PackedVector2Array(-460, -40, 460, -40, 460, 40, -460, 40)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RoofEnd"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RoofEnd" unique_id=1701804267]
 shape = SubResource("RoofShapeEnd")
 
-[node name="Player" type="CharacterBody2D" parent="."]
+[node name="Player" type="CharacterBody2D" parent="." unique_id=846778430]
 position = Vector2(150, 480)
 script = ExtResource("2_player")
 
-[node name="Visual" type="Polygon2D" parent="Player"]
-polygon = PackedVector2Array(-22, -24, 16, -24, 26, -8, 20, 22, -16, 24, -28, 5)
+[node name="Visual" type="Polygon2D" parent="Player" unique_id=2094352798]
 color = Color(1, 0.55, 0.16, 1)
+polygon = PackedVector2Array(-22, -24, 16, -24, 26, -8, 20, 22, -16, 24, -28, 5)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player" unique_id=1140248656]
 shape = SubResource("PlayerShape")
 
-[node name="Camera2D" type="Camera2D" parent="Player"]
+[node name="Camera2D" type="Camera2D" parent="Player" unique_id=1842116910]
 position = Vector2(180, 0)
-position_smoothing_enabled = true
-position_smoothing_speed = 6.0
 limit_left = 0
 limit_top = 0
 limit_right = 3500
 limit_bottom = 648
+position_smoothing_enabled = true
+position_smoothing_speed = 6.0
 
-[node name="Obstacle" type="StaticBody2D" parent="."]
+[node name="Obstacle" type="StaticBody2D" parent="." unique_id=547566337]
 position = Vector2(780, 480)
 
-[node name="Visual" type="Polygon2D" parent="Obstacle"]
-polygon = PackedVector2Array(-27, -40, 27, -40, 27, 40, -27, 40)
+[node name="Visual" type="Polygon2D" parent="Obstacle" unique_id=538634190]
 color = Color(0.88, 0.32, 0.23, 1)
+polygon = PackedVector2Array(-27, -40, 27, -40, 27, 40, -27, 40)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Obstacle"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Obstacle" unique_id=1725543337]
 shape = SubResource("ObstacleShape")
 
-[node name="FinishZone" type="Area2D" parent="."]
+[node name="DamagePuddle" type="Area2D" parent="." unique_id=214183658]
+position = Vector2(1840, 508)
+
+[node name="Visual" type="Polygon2D" parent="DamagePuddle" unique_id=1626521738]
+color = Color(0.83, 0.16, 0.25, 1)
+polygon = PackedVector2Array(-56, -12, 56, -12, 72, 0, 56, 12, -56, 12, -72, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DamagePuddle" unique_id=1629940487]
+shape = SubResource("PuddleShape")
+
+[node name="Letter01" type="Area2D" parent="." unique_id=1696717969]
+position = Vector2(410, 458)
+script = ExtResource("3_collectible")
+
+[node name="Visual" type="Polygon2D" parent="Letter01" unique_id=1373872195]
+color = Color(1, 0.84, 0.24, 1)
+polygon = PackedVector2Array(-18, -13, 18, -13, 18, 13, -18, 13)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Letter01" unique_id=7095850]
+shape = SubResource("CollectibleShape")
+
+[node name="Letter02" type="Area2D" parent="." unique_id=1746623120]
+position = Vector2(920, 458)
+script = ExtResource("3_collectible")
+
+[node name="Visual" type="Polygon2D" parent="Letter02" unique_id=2114531610]
+color = Color(1, 0.84, 0.24, 1)
+polygon = PackedVector2Array(-18, -13, 18, -13, 18, 13, -18, 13)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Letter02" unique_id=1719091695]
+shape = SubResource("CollectibleShape")
+
+[node name="Letter03" type="Area2D" parent="." unique_id=1962282497]
+position = Vector2(1420, 458)
+script = ExtResource("3_collectible")
+
+[node name="Visual" type="Polygon2D" parent="Letter03" unique_id=755255017]
+color = Color(1, 0.84, 0.24, 1)
+polygon = PackedVector2Array(-18, -13, 18, -13, 18, 13, -18, 13)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Letter03" unique_id=962721342]
+shape = SubResource("CollectibleShape")
+
+[node name="Letter04" type="Area2D" parent="." unique_id=459756979]
+position = Vector2(1740, 458)
+script = ExtResource("3_collectible")
+
+[node name="Visual" type="Polygon2D" parent="Letter04" unique_id=2079673235]
+color = Color(1, 0.84, 0.24, 1)
+polygon = PackedVector2Array(-18, -13, 18, -13, 18, 13, -18, 13)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Letter04" unique_id=1498616099]
+shape = SubResource("CollectibleShape")
+
+[node name="Letter05" type="Area2D" parent="." unique_id=1761342957]
+position = Vector2(2080, 458)
+script = ExtResource("3_collectible")
+
+[node name="Visual" type="Polygon2D" parent="Letter05" unique_id=477640447]
+color = Color(1, 0.84, 0.24, 1)
+polygon = PackedVector2Array(-18, -13, 18, -13, 18, 13, -18, 13)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Letter05" unique_id=406887139]
+shape = SubResource("CollectibleShape")
+
+[node name="Letter06" type="Area2D" parent="." unique_id=987947571]
+position = Vector2(2700, 458)
+script = ExtResource("3_collectible")
+
+[node name="Visual" type="Polygon2D" parent="Letter06" unique_id=1375647574]
+color = Color(1, 0.84, 0.24, 1)
+polygon = PackedVector2Array(-18, -13, 18, -13, 18, 13, -18, 13)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Letter06" unique_id=1854199750]
+shape = SubResource("CollectibleShape")
+
+[node name="Fish01" type="Area2D" parent="." unique_id=336957646]
+position = Vector2(2390, 458)
+script = ExtResource("3_collectible")
+collectible_type = "fish"
+
+[node name="Visual" type="Polygon2D" parent="Fish01" unique_id=1399980693]
+color = Color(0.28, 0.88, 0.93, 1)
+polygon = PackedVector2Array(-22, 0, -8, -13, 12, -10, 22, 0, 12, 10, -8, 13)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Fish01" unique_id=367016545]
+shape = SubResource("CollectibleShape")
+
+[node name="Fish02" type="Area2D" parent="." unique_id=1405311842]
+position = Vector2(2800, 458)
+script = ExtResource("3_collectible")
+collectible_type = "fish"
+
+[node name="Visual" type="Polygon2D" parent="Fish02" unique_id=2045590172]
+color = Color(0.28, 0.88, 0.93, 1)
+polygon = PackedVector2Array(-22, 0, -8, -13, 12, -10, 22, 0, 12, 10, -8, 13)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Fish02" unique_id=812750762]
+shape = SubResource("CollectibleShape")
+
+[node name="FinishZone" type="Area2D" parent="." unique_id=840745779]
 position = Vector2(3000, 410)
 
-[node name="Visual" type="Polygon2D" parent="FinishZone"]
-polygon = PackedVector2Array(-18, -130, 18, -130, 18, 130, -18, 130)
+[node name="Visual" type="Polygon2D" parent="FinishZone" unique_id=28981850]
 color = Color(0.3, 0.9, 0.48, 1)
+polygon = PackedVector2Array(-18, -130, 18, -130, 18, 130, -18, 130)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="FinishZone"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FinishZone" unique_id=1133976915]
 shape = SubResource("FinishShape")
 
-[node name="Interface" type="CanvasLayer" parent="."]
+[node name="Interface" type="CanvasLayer" parent="." unique_id=843953350]
 layer = 2
 
-[node name="TimerLabel" type="Label" parent="Interface"]
+[node name="TimerLabel" type="Label" parent="Interface" unique_id=2139682666]
 unique_name_in_owner = true
 offset_left = 28.0
 offset_top = 24.0
@@ -121,7 +228,41 @@ theme_override_colors/font_color = Color(0.95, 0.96, 1, 1)
 theme_override_font_sizes/font_size = 24
 text = "Время  00:00.00"
 
-[node name="ControlsLabel" type="Label" parent="Interface"]
+[node name="HeartsLabel" type="Label" parent="Interface" unique_id=937923109]
+unique_name_in_owner = true
+offset_left = 820.0
+offset_top = 24.0
+offset_right = 1124.0
+offset_bottom = 58.0
+theme_override_colors/font_color = Color(1, 0.43, 0.5, 1)
+theme_override_font_sizes/font_size = 24
+text = "Сердца  ♥♥♥"
+horizontal_alignment = 2
+
+[node name="LettersLabel" type="Label" parent="Interface" unique_id=1790542576]
+unique_name_in_owner = true
+offset_left = 820.0
+offset_top = 58.0
+offset_right = 1124.0
+offset_bottom = 84.0
+theme_override_colors/font_color = Color(1, 0.84, 0.24, 1)
+theme_override_font_sizes/font_size = 18
+text = "Письма  0 / 0"
+horizontal_alignment = 2
+
+[node name="DamageLabel" type="Label" parent="Interface" unique_id=1495047958]
+unique_name_in_owner = true
+visible = false
+offset_left = 540.0
+offset_top = 130.0
+offset_right = 612.0
+offset_bottom = 180.0
+theme_override_colors/font_color = Color(1, 0.2, 0.28, 1)
+theme_override_font_sizes/font_size = 42
+text = "−1"
+horizontal_alignment = 1
+
+[node name="ControlsLabel" type="Label" parent="Interface" unique_id=1148893]
 offset_left = 28.0
 offset_top = 58.0
 offset_right = 500.0
@@ -130,40 +271,39 @@ theme_override_colors/font_color = Color(0.65, 0.72, 0.9, 1)
 theme_override_font_sizes/font_size = 16
 text = "Space / ↑ — прыжок • ↓ — быстрое снижение"
 
-[node name="ResultPanel" type="PanelContainer" parent="Interface"]
+[node name="ResultPanel" type="PanelContainer" parent="Interface" unique_id=948698151]
 unique_name_in_owner = true
 offset_left = 376.0
 offset_top = 190.0
 offset_right = 776.0
 offset_bottom = 450.0
 
-[node name="Content" type="VBoxContainer" parent="Interface/ResultPanel"]
+[node name="Content" type="VBoxContainer" parent="Interface/ResultPanel" unique_id=1728974111]
 layout_mode = 2
 theme_override_constants/separation = 14
 alignment = 1
 
-[node name="ResultTitle" type="Label" parent="Interface/ResultPanel/Content"]
+[node name="ResultTitle" type="Label" parent="Interface/ResultPanel/Content" unique_id=1964817749]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 28
 text = "Результат"
 horizontal_alignment = 1
 
-[node name="ResultDetails" type="Label" parent="Interface/ResultPanel/Content"]
+[node name="ResultDetails" type="Label" parent="Interface/ResultPanel/Content" unique_id=1820710138]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
-text = ""
 horizontal_alignment = 1
 
-[node name="RetryButton" type="Button" parent="Interface/ResultPanel/Content"]
+[node name="RetryButton" type="Button" parent="Interface/ResultPanel/Content" unique_id=1461456165]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "Повторить"
 
-[node name="MenuButton" type="Button" parent="Interface/ResultPanel/Content"]
+[node name="MenuButton" type="Button" parent="Interface/ResultPanel/Content" unique_id=1479732363]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2

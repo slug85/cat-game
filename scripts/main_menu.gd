@@ -10,11 +10,14 @@ func _ready() -> void:
 	play_button.pressed.connect(_on_play_pressed)
 	exit_button.pressed.connect(_on_exit_pressed)
 	play_button.grab_focus()
+	DebugLog.event("MENU", "opened")
 
 
 func _on_play_pressed() -> void:
+	DebugLog.event("MENU", "start_level_01")
 	get_tree().change_scene_to_file("res://scenes/level_01.tscn")
 
 
 func _on_exit_pressed() -> void:
+	DebugLog.event("MENU", "exit_requested")
 	get_tree().quit()
