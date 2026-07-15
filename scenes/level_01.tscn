@@ -1,0 +1,171 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/level_01.gd" id="1_level"]
+[ext_resource type="Script" path="res://scripts/player.gd" id="2_player"]
+
+[sub_resource type="RectangleShape2D" id="RoofShapeLong"]
+size = Vector2(1000, 80)
+
+[sub_resource type="RectangleShape2D" id="RoofShapeMedium"]
+size = Vector2(900, 80)
+
+[sub_resource type="RectangleShape2D" id="RoofShapeEnd"]
+size = Vector2(920, 80)
+
+[sub_resource type="CircleShape2D" id="PlayerShape"]
+radius = 22.0
+
+[sub_resource type="RectangleShape2D" id="ObstacleShape"]
+size = Vector2(54, 80)
+
+[sub_resource type="RectangleShape2D" id="FinishShape"]
+size = Vector2(36, 260)
+
+[node name="Level01" type="Node2D"]
+script = ExtResource("1_level")
+
+[node name="Background" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="Sky" type="ColorRect" parent="Background"]
+offset_right = 1152.0
+offset_bottom = 648.0
+color = Color(0.025, 0.05, 0.13, 1)
+
+[node name="Horizon" type="ColorRect" parent="Background"]
+offset_top = 360.0
+offset_right = 1152.0
+offset_bottom = 648.0
+color = Color(0.07, 0.1, 0.22, 1)
+
+[node name="RoofStart" type="StaticBody2D" parent="."]
+position = Vector2(500, 560)
+
+[node name="Visual" type="Polygon2D" parent="RoofStart"]
+polygon = PackedVector2Array(-500, -40, 500, -40, 500, 40, -500, 40)
+color = Color(0.21, 0.25, 0.34, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RoofStart"]
+shape = SubResource("RoofShapeLong")
+
+[node name="RoofMiddle" type="StaticBody2D" parent="."]
+position = Vector2(1650, 560)
+
+[node name="Visual" type="Polygon2D" parent="RoofMiddle"]
+polygon = PackedVector2Array(-450, -40, 450, -40, 450, 40, -450, 40)
+color = Color(0.25, 0.29, 0.4, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RoofMiddle"]
+shape = SubResource("RoofShapeMedium")
+
+[node name="RoofEnd" type="StaticBody2D" parent="."]
+position = Vector2(2700, 560)
+
+[node name="Visual" type="Polygon2D" parent="RoofEnd"]
+polygon = PackedVector2Array(-460, -40, 460, -40, 460, 40, -460, 40)
+color = Color(0.21, 0.25, 0.34, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RoofEnd"]
+shape = SubResource("RoofShapeEnd")
+
+[node name="Player" type="CharacterBody2D" parent="."]
+position = Vector2(150, 480)
+script = ExtResource("2_player")
+
+[node name="Visual" type="Polygon2D" parent="Player"]
+polygon = PackedVector2Array(-22, -24, 16, -24, 26, -8, 20, 22, -16, 24, -28, 5)
+color = Color(1, 0.55, 0.16, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+shape = SubResource("PlayerShape")
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+position = Vector2(180, 0)
+position_smoothing_enabled = true
+position_smoothing_speed = 6.0
+limit_left = 0
+limit_top = 0
+limit_right = 3500
+limit_bottom = 648
+
+[node name="Obstacle" type="StaticBody2D" parent="."]
+position = Vector2(780, 480)
+
+[node name="Visual" type="Polygon2D" parent="Obstacle"]
+polygon = PackedVector2Array(-27, -40, 27, -40, 27, 40, -27, 40)
+color = Color(0.88, 0.32, 0.23, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Obstacle"]
+shape = SubResource("ObstacleShape")
+
+[node name="FinishZone" type="Area2D" parent="."]
+position = Vector2(3000, 410)
+
+[node name="Visual" type="Polygon2D" parent="FinishZone"]
+polygon = PackedVector2Array(-18, -130, 18, -130, 18, 130, -18, 130)
+color = Color(0.3, 0.9, 0.48, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FinishZone"]
+shape = SubResource("FinishShape")
+
+[node name="Interface" type="CanvasLayer" parent="."]
+layer = 2
+
+[node name="TimerLabel" type="Label" parent="Interface"]
+unique_name_in_owner = true
+offset_left = 28.0
+offset_top = 24.0
+offset_right = 290.0
+offset_bottom = 58.0
+theme_override_colors/font_color = Color(0.95, 0.96, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "Время  00:00.00"
+
+[node name="ControlsLabel" type="Label" parent="Interface"]
+offset_left = 28.0
+offset_top = 58.0
+offset_right = 500.0
+offset_bottom = 84.0
+theme_override_colors/font_color = Color(0.65, 0.72, 0.9, 1)
+theme_override_font_sizes/font_size = 16
+text = "Space / ↑ — прыжок • ↓ — быстрое снижение"
+
+[node name="ResultPanel" type="PanelContainer" parent="Interface"]
+unique_name_in_owner = true
+offset_left = 376.0
+offset_top = 190.0
+offset_right = 776.0
+offset_bottom = 450.0
+
+[node name="Content" type="VBoxContainer" parent="Interface/ResultPanel"]
+layout_mode = 2
+theme_override_constants/separation = 14
+alignment = 1
+
+[node name="ResultTitle" type="Label" parent="Interface/ResultPanel/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Результат"
+horizontal_alignment = 1
+
+[node name="ResultDetails" type="Label" parent="Interface/ResultPanel/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = ""
+horizontal_alignment = 1
+
+[node name="RetryButton" type="Button" parent="Interface/ResultPanel/Content"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Повторить"
+
+[node name="MenuButton" type="Button" parent="Interface/ResultPanel/Content"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+text = "В меню"
