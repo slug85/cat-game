@@ -14,7 +14,7 @@ signal defeated
 @export var max_health := 3
 @export var invulnerability_duration := 1.0
 
-@onready var visual: Polygon2D = $Visual
+@onready var visual: Sprite2D = $CatSprite
 
 var current_health := 3
 var invulnerability_remaining := 0.0

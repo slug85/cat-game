@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://d2nb1d1rldevr" path="res://scripts/level_01.gd" id="1_level"]
 [ext_resource type="Script" uid="uid://7abpcspedoij" path="res://scripts/player.gd" id="2_player"]
 [ext_resource type="Script" uid="uid://h4dgac7bgn1p" path="res://scripts/collectible.gd" id="3_collectible"]
+[ext_resource type="Script" path="res://scripts/player_animation.gd" id="4_player_animation"]
 
 [sub_resource type="RectangleShape2D" id="RoofShapeLong"]
 size = Vector2(1000, 80)
@@ -13,8 +14,8 @@ size = Vector2(900, 80)
 [sub_resource type="RectangleShape2D" id="RoofShapeEnd"]
 size = Vector2(920, 80)
 
-[sub_resource type="CircleShape2D" id="PlayerShape"]
-radius = 22.0
+[sub_resource type="RectangleShape2D" id="PlayerShape"]
+size = Vector2(40, 44)
 
 [sub_resource type="RectangleShape2D" id="ObstacleShape"]
 size = Vector2(54, 80)
@@ -22,8 +23,11 @@ size = Vector2(54, 80)
 [sub_resource type="RectangleShape2D" id="PuddleShape"]
 size = Vector2(112, 24)
 
-[sub_resource type="CircleShape2D" id="CollectibleShape"]
-radius = 18.0
+[sub_resource type="RectangleShape2D" id="CollectibleShape"]
+size = Vector2(36, 26)
+
+[sub_resource type="RectangleShape2D" id="FishShape"]
+size = Vector2(44, 26)
 
 [sub_resource type="RectangleShape2D" id="FinishShape"]
 size = Vector2(36, 260)
@@ -79,9 +83,11 @@ shape = SubResource("RoofShapeEnd")
 position = Vector2(150, 480)
 script = ExtResource("2_player")
 
-[node name="Visual" type="Polygon2D" parent="Player" unique_id=2094352798]
-color = Color(1, 0.55, 0.16, 1)
-polygon = PackedVector2Array(-22, -24, 16, -24, 26, -8, 20, 22, -16, 24, -28, 5)
+[node name="CatSprite" type="Sprite2D" parent="Player"]
+texture_filter = 1
+position = Vector2(0, 7)
+flip_h = true
+script = ExtResource("4_player_animation")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player" unique_id=1140248656]
 shape = SubResource("PlayerShape")
@@ -211,7 +217,7 @@ color = Color(0.28, 0.88, 0.93, 1)
 polygon = PackedVector2Array(-22, 0, -8, -13, 12, -10, 22, 0, 12, 10, -8, 13)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Fish01" unique_id=367016545]
-shape = SubResource("CollectibleShape")
+shape = SubResource("FishShape")
 
 [node name="Fish02" type="Area2D" parent="." unique_id=1405311842]
 position = Vector2(2800, 458)
@@ -223,7 +229,7 @@ color = Color(0.28, 0.88, 0.93, 1)
 polygon = PackedVector2Array(-22, 0, -8, -13, 12, -10, 22, 0, 12, 10, -8, 13)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Fish02" unique_id=812750762]
-shape = SubResource("CollectibleShape")
+shape = SubResource("FishShape")
 
 [node name="FinishZone" type="Area2D" parent="." unique_id=840745779]
 position = Vector2(3000, 410)
