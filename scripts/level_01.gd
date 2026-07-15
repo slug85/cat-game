@@ -12,6 +12,10 @@ const FALL_Y := 760.0
 @onready var letters_label: Label = %LettersLabel
 @onready var damage_label: Label = %DamageLabel
 @onready var hint_label: Label = %HintLabel
+@onready var pause_panel: PanelContainer = %PausePanel
+@onready var pause_details: Label = %PauseDetails
+@onready var resume_button: Button = %ResumeButton
+@onready var pause_menu_button: Button = %PauseMenuButton
 @onready var result_panel: PanelContainer = %ResultPanel
 @onready var result_title: Label = %ResultTitle
 @onready var result_details: Label = %ResultDetails
@@ -22,6 +26,8 @@ var elapsed_seconds := 0.0
 var is_run_active := true
 var letters_collected := 0
 var total_letters := 0
+var fish_collected := 0
+var total_fish := 0
 var damage_feedback_remaining := 0.0
 
 
@@ -33,8 +39,11 @@ func _ready() -> void:
 	player.defeated.connect(_on_player_defeated)
 	retry_button.pressed.connect(_on_retry_pressed)
 	menu_button.pressed.connect(_on_menu_pressed)
+	resume_button.pressed.connect(_on_resume_pressed)
+	pause_menu_button.pressed.connect(_on_pause_menu_pressed)
 	_connect_collectibles()
 	result_panel.hide()
+	pause_panel.hide()
 	_update_timer_label()
 	_update_health_label(player.current_health, player.max_health)
 	_update_letters_label()
@@ -42,6 +51,9 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	if get_tree().paused:
+		return
+
 	_update_damage_feedback(delta)
 	if not is_run_active:
 		return
@@ -52,6 +64,14 @@ func _process(delta: float) -> void:
 		hint_label.hide()
 	if player.global_position.y > FALL_Y:
 		_end_run(false, "fall")
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not is_run_active or not event.is_action_pressed("ui_cancel"):
+		return
+
+	_set_paused(not get_tree().paused)
+	get_viewport().set_input_as_handled()
 
 
 func _on_finish_zone_body_entered(body: Node2D) -> void:
@@ -83,6 +103,8 @@ func _connect_collectibles() -> void:
 		collectible.collected.connect(_on_collectible_collected)
 		if collectible.collectible_type == "letter":
 			total_letters += collectible.amount
+		elif collectible.collectible_type == "fish":
+			total_fish += collectible.amount
 
 
 func _on_collectible_collected(collectible: RunnerCollectible) -> void:
@@ -91,6 +113,7 @@ func _on_collectible_collected(collectible: RunnerCollectible) -> void:
 		_update_letters_label()
 		DebugLog.event("COLLECT", "type=letter total=%d/%d x=%.0f" % [letters_collected, total_letters, collectible.global_position.x])
 	elif collectible.collectible_type == "fish":
+		fish_collected += collectible.amount
 		var restored: int = player.heal(collectible.amount)
 		DebugLog.event("HEAL", "type=fish restored=%d hearts=%d/%d x=%.0f" % [restored, player.current_health, player.max_health, collectible.global_position.x])
 
@@ -130,6 +153,34 @@ func _update_letters_label() -> void:
 	letters_label.text = "Письма  %d / %d" % [letters_collected, total_letters]
 
 
+func _set_paused(should_pause: bool) -> void:
+	get_tree().paused = should_pause
+	player.set_physics_process(not should_pause)
+	player.visual.set_process(not should_pause)
+	if should_pause:
+		_update_pause_details()
+		pause_panel.show()
+		resume_button.grab_focus()
+		DebugLog.event("PAUSE", "opened time=%s" % GameState.format_time(elapsed_seconds))
+	else:
+		pause_panel.hide()
+		DebugLog.event("PAUSE", "resumed")
+
+
+func _update_pause_details() -> void:
+	pause_details.text = "Время: %s\nСердца: %d / %d\nПисьма: %d / %d\nРыбки: %d / %d\nВсего предметов: %d / %d" % [
+		GameState.format_time(elapsed_seconds),
+		player.current_health,
+		player.max_health,
+		letters_collected,
+		total_letters,
+		fish_collected,
+		total_fish,
+		letters_collected + fish_collected,
+		total_letters + total_fish,
+	]
+
+
 func _show_damage_feedback() -> void:
 	damage_feedback_remaining = 0.8
 	damage_label.modulate.a = 1.0
@@ -153,4 +204,14 @@ func _on_retry_pressed() -> void:
 
 func _on_menu_pressed() -> void:
 	DebugLog.event("MENU", "return_to_main_menu")
+	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
+
+
+func _on_resume_pressed() -> void:
+	_set_paused(false)
+
+
+func _on_pause_menu_pressed() -> void:
+	get_tree().paused = false
+	DebugLog.event("MENU", "pause_return_to_main_menu")
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")

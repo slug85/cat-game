@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://d2nb1d1rldevr" path="res://scripts/level_01.gd" id="1_level"]
 [ext_resource type="Script" uid="uid://7abpcspedoij" path="res://scripts/player.gd" id="2_player"]
 [ext_resource type="Script" uid="uid://h4dgac7bgn1p" path="res://scripts/collectible.gd" id="3_collectible"]
-[ext_resource type="Script" path="res://scripts/player_animation.gd" id="4_player_animation"]
+[ext_resource type="Script" uid="uid://dnbt0m4ywq176" path="res://scripts/player_animation.gd" id="4_player_animation"]
 
 [sub_resource type="RectangleShape2D" id="RoofShapeLong"]
 size = Vector2(1000, 80)
@@ -33,6 +33,7 @@ size = Vector2(44, 26)
 size = Vector2(36, 260)
 
 [node name="Level01" type="Node2D" unique_id=421862357]
+process_mode = 3
 script = ExtResource("1_level")
 
 [node name="Background" type="CanvasLayer" parent="." unique_id=377721313]
@@ -83,7 +84,7 @@ shape = SubResource("RoofShapeEnd")
 position = Vector2(150, 480)
 script = ExtResource("2_player")
 
-[node name="CatSprite" type="Sprite2D" parent="Player"]
+[node name="CatSprite" type="Sprite2D" parent="Player" unique_id=1494663012]
 texture_filter = 1
 position = Vector2(0, 7)
 flip_h = true
@@ -121,24 +122,24 @@ polygon = PackedVector2Array(-56, -12, 56, -12, 72, 0, 56, 12, -56, 12, -72, 0)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DamagePuddle" unique_id=1629940487]
 shape = SubResource("PuddleShape")
 
-[node name="DamagePuddle02" type="Area2D" parent="."]
+[node name="DamagePuddle02" type="Area2D" parent="." unique_id=879185023]
 position = Vector2(2540, 508)
 
-[node name="Visual" type="Polygon2D" parent="DamagePuddle02"]
+[node name="Visual" type="Polygon2D" parent="DamagePuddle02" unique_id=1901706206]
 color = Color(0.83, 0.16, 0.25, 1)
 polygon = PackedVector2Array(-56, -12, 56, -12, 72, 0, 56, 12, -56, 12, -72, 0)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="DamagePuddle02"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DamagePuddle02" unique_id=1293440891]
 shape = SubResource("PuddleShape")
 
-[node name="DamagePuddle03" type="Area2D" parent="."]
+[node name="DamagePuddle03" type="Area2D" parent="." unique_id=676360316]
 position = Vector2(2890, 508)
 
-[node name="Visual" type="Polygon2D" parent="DamagePuddle03"]
+[node name="Visual" type="Polygon2D" parent="DamagePuddle03" unique_id=1090673989]
 color = Color(0.83, 0.16, 0.25, 1)
 polygon = PackedVector2Array(-56, -12, 56, -12, 72, 0, 56, 12, -56, 12, -72, 0)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="DamagePuddle03"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DamagePuddle03" unique_id=652662083]
 shape = SubResource("PuddleShape")
 
 [node name="Letter01" type="Area2D" parent="." unique_id=1696717969]
@@ -297,7 +298,7 @@ theme_override_colors/font_color = Color(0.65, 0.72, 0.9, 1)
 theme_override_font_sizes/font_size = 16
 text = "Space / ↑ — прыжок • ↓ — быстрое снижение"
 
-[node name="HintLabel" type="Label" parent="Interface"]
+[node name="HintLabel" type="Label" parent="Interface" unique_id=920275369]
 unique_name_in_owner = true
 offset_left = 190.0
 offset_top = 110.0
@@ -308,8 +309,56 @@ theme_override_font_sizes/font_size = 18
 text = "Собирайте письма • Рыбки лечат • Лужи отнимают сердце"
 horizontal_alignment = 1
 
+[node name="PausePanel" type="PanelContainer" parent="Interface" unique_id=1778848182]
+unique_name_in_owner = true
+process_mode = 3
+offset_left = 376.0
+offset_top = 150.0
+offset_right = 776.0
+offset_bottom = 445.0
+
+[node name="Content" type="VBoxContainer" parent="Interface/PausePanel" unique_id=250671579]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="Title" type="Label" parent="Interface/PausePanel/Content" unique_id=1704766431]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.74, 0.3, 1)
+theme_override_font_sizes/font_size = 28
+text = "Пауза"
+horizontal_alignment = 1
+
+[node name="LevelName" type="Label" parent="Interface/PausePanel/Content" unique_id=1255766757]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.84, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "Уровень 01 — Ночные крыши"
+horizontal_alignment = 1
+
+[node name="PauseDetails" type="Label" parent="Interface/PausePanel/Content" unique_id=1409099601]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+horizontal_alignment = 1
+
+[node name="ResumeButton" type="Button" parent="Interface/PausePanel/Content" unique_id=1186664683]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Продолжить"
+
+[node name="PauseMenuButton" type="Button" parent="Interface/PausePanel/Content" unique_id=535860693]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+text = "В меню"
+
 [node name="ResultPanel" type="PanelContainer" parent="Interface" unique_id=948698151]
 unique_name_in_owner = true
+visible = false
 offset_left = 376.0
 offset_top = 190.0
 offset_right = 776.0
