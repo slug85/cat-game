@@ -1,8 +1,12 @@
 extends Node2D
 
-## Управляет забегом первой тестовой трассы: таймером, финишем и падением.
+## Базовый контроллер забега: таймер, финиш, падение, UI и предметы.
+## Его наследуют альтернативные трассы с другой геометрией и оформлением.
 
 const FALL_Y := 760.0
+
+@export var level_id := "01"
+@export var level_name := "Ночные крыши"
 
 @onready var player: RunnerPlayer = $Player
 @onready var finish_zone: Area2D = $FinishZone
@@ -13,6 +17,7 @@ const FALL_Y := 760.0
 @onready var damage_label: Label = %DamageLabel
 @onready var hint_label: Label = %HintLabel
 @onready var pause_panel: PanelContainer = %PausePanel
+@onready var level_name_label: Label = $Interface/PausePanel/Content/LevelName
 @onready var pause_details: Label = %PauseDetails
 @onready var resume_button: Button = %ResumeButton
 @onready var pause_menu_button: Button = %PauseMenuButton
@@ -53,10 +58,11 @@ func _ready() -> void:
 	_connect_collectibles()
 	result_panel.hide()
 	pause_panel.hide()
+	level_name_label.text = "Уровень %s — %s" % [level_id, level_name]
 	_update_timer_label()
 	_update_health_label(player.current_health, player.max_health)
 	_update_letters_label()
-	DebugLog.event("RUN", "start level=01")
+	DebugLog.event("RUN", "start level=%s" % level_id)
 
 
 func _process(delta: float) -> void:
@@ -144,14 +150,15 @@ func _end_run(is_victory: bool, failure_reason: String = "") -> void:
 	result_panel.show()
 
 	if is_victory:
-		var is_new_record := GameState.register_finish_time(elapsed_seconds)
+		var is_new_record := GameState.register_finish_time(elapsed_seconds, level_id)
+		var level_best := GameState.get_best_time(level_id)
 		DebugLog.event("RUN", "finish time=%s new_record=%s" % [GameState.format_time(elapsed_seconds), is_new_record])
 		result_title.text = "Доставка завершена!"
 		result_details.text = "Время: %s\nПисьма: %d / %d\n%s" % [
 			GameState.format_time(elapsed_seconds),
 			letters_collected,
 			total_letters,
-			"Новый рекорд!" if is_new_record else "Лучшее время: %s" % GameState.format_time(GameState.best_time_seconds),
+			"Новый рекорд!" if is_new_record else "Лучшее время: %s" % GameState.format_time(level_best),
 		]
 	else:
 		DebugLog.event("RUN", "failed reason=%s time=%s x=%.0f letters=%d/%d" % [failure_reason, GameState.format_time(elapsed_seconds), player.global_position.x, letters_collected, total_letters])
@@ -218,13 +225,13 @@ func _update_damage_feedback(delta: float) -> void:
 
 
 func _on_retry_pressed() -> void:
-	DebugLog.event("MENU", "retry_level_01")
+	DebugLog.event("MENU", "retry_level_%s" % level_id)
 	get_tree().reload_current_scene()
 
 
 func _on_menu_pressed() -> void:
-	DebugLog.event("MENU", "return_to_main_menu")
-	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
+	DebugLog.event("MENU", "return_to_route_map")
+	get_tree().change_scene_to_file("res://scenes/world_map.tscn")
 
 
 func _on_resume_pressed() -> void:
@@ -233,5 +240,5 @@ func _on_resume_pressed() -> void:
 
 func _on_pause_menu_pressed() -> void:
 	get_tree().paused = false
-	DebugLog.event("MENU", "pause_return_to_main_menu")
-	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
+	DebugLog.event("MENU", "pause_return_to_route_map")
+	get_tree().change_scene_to_file("res://scenes/world_map.tscn")

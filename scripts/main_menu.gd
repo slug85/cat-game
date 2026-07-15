@@ -14,8 +14,8 @@ func _ready() -> void:
 
 
 func _on_play_pressed() -> void:
-	DebugLog.event("MENU", "start_level_01")
-	get_tree().change_scene_to_file("res://scenes/level_01.tscn")
+	DebugLog.event("MENU", "open_route_map")
+	get_tree().change_scene_to_file("res://scenes/world_map.tscn")
 
 
 func _on_exit_pressed() -> void:

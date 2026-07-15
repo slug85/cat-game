@@ -1,0 +1,144 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/world_map.gd" id="1_map"]
+
+[node name="WorldMap" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_map")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.025, 0.045, 0.12, 1)
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 0
+offset_left = 300.0
+offset_top = 42.0
+offset_right = 852.0
+offset_bottom = 92.0
+theme_override_colors/font_color = Color(1, 0.7, 0.3, 1)
+theme_override_font_sizes/font_size = 34
+text = "Карта маршрутов «Рыжего хвоста»"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="."]
+layout_mode = 0
+offset_left = 270.0
+offset_top = 94.0
+offset_right = 882.0
+offset_bottom = 124.0
+theme_override_colors/font_color = Color(0.68, 0.78, 1, 1)
+theme_override_font_sizes/font_size = 17
+text = "Выберите ветвь. Все маршруты открыты для тестирования."
+horizontal_alignment = 1
+
+[node name="RouteStart" type="ColorRect" parent="."]
+layout_mode = 0
+offset_left = 310.0
+offset_top = 386.0
+offset_right = 510.0
+offset_bottom = 392.0
+color = Color(0.35, 0.52, 0.9, 1)
+
+[node name="RouteUpper" type="ColorRect" parent="."]
+layout_mode = 0
+offset_left = 500.0
+offset_top = 284.0
+offset_right = 508.0
+offset_bottom = 390.0
+rotation = -0.72
+color = Color(0.66, 0.48, 0.94, 1)
+
+[node name="RouteLower" type="ColorRect" parent="."]
+layout_mode = 0
+offset_left = 500.0
+offset_top = 390.0
+offset_right = 508.0
+offset_bottom = 496.0
+rotation = 0.72
+color = Color(0.26, 0.88, 0.86, 1)
+
+[node name="RouteFinish" type="ColorRect" parent="."]
+layout_mode = 0
+offset_left = 650.0
+offset_top = 386.0
+offset_right = 850.0
+offset_bottom = 392.0
+color = Color(0.42, 0.5, 0.74, 0.65)
+
+[node name="Level01Button" type="Button" parent="."]
+unique_name_in_owner = true
+offset_left = 125.0
+offset_top = 330.0
+offset_right = 325.0
+offset_bottom = 444.0
+theme_override_font_sizes/font_size = 20
+text = "01\nНочные крыши"
+
+[node name="OldQuarterButton" type="Button" parent="."]
+unique_name_in_owner = true
+offset_left = 440.0
+offset_top = 185.0
+offset_right = 650.0
+offset_bottom = 299.0
+theme_override_colors/font_color = Color(0.91, 0.8, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "02A\nСтарый квартал"
+
+[node name="NeonBypassButton" type="Button" parent="."]
+unique_name_in_owner = true
+offset_left = 440.0
+offset_top = 475.0
+offset_right = 650.0
+offset_bottom = 589.0
+theme_override_colors/font_color = Color(0.66, 1, 0.96, 1)
+theme_override_font_sizes/font_size = 20
+text = "02B\nНеоновый обход"
+
+[node name="Depot" type="Panel" parent="."]
+offset_left = 850.0
+offset_top = 330.0
+offset_right = 1050.0
+offset_bottom = 444.0
+
+[node name="Label" type="Label" parent="Depot"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.62, 0.74, 1, 1)
+theme_override_font_sizes/font_size = 19
+text = "03\nГлавный депо\n(скоро)"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Legend" type="Label" parent="."]
+offset_left = 260.0
+offset_top = 610.0
+offset_right = 892.0
+offset_bottom = 638.0
+theme_override_colors/font_color = Color(0.58, 0.66, 0.86, 1)
+theme_override_font_sizes/font_size = 15
+text = "Верхняя ветвь — каменные платформы и рыба • Нижняя — неоновые платформы и письма"
+horizontal_alignment = 1
+
+[node name="MenuButton" type="Button" parent="."]
+unique_name_in_owner = true
+offset_left = 32.0
+offset_top = 572.0
+offset_right = 188.0
+offset_bottom = 620.0
+theme_override_font_sizes/font_size = 17
+text = "В главное меню"
