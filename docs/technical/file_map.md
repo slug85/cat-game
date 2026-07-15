@@ -18,13 +18,14 @@
 | `scripts/player_animation.gd` | Переключение спрайтовых листов кота между бегом, прыжком и уроном. |
 | `scripts/collectible.gd` | Общая логика подбора писем и рыбок. |
 | `scripts/letter_animation.gd` | Трёхкадровая пульсация писем без изменения коллайдеров. |
-| `scripts/central_city_art.gd` | Декоративная отрисовка фасадов крыш, технической стены, анимированного пара из люков и ворот доставки. |
+| `scripts/central_city_art.gd` | Декоративная отрисовка фасадов крыш, Старого квартала, анимированного пара и ворот доставки. |
 | `scripts/fish_animation.gd` | Покадровая анимация и покачивание рыбы-подборки. |
 | `scripts/level_01.gd` | Таймер, пауза, урон от вентиляционных люков, предметы, звук событий, подсказка, падение, финиш и экраны результата. |
 | `scripts/game_state.gd` | Локальное сохранение и форматирование лучшего времени. |
 | `scripts/debug_log.gd` | Глобальный отладочный журнал, включаемый и выключаемый клавишей F3. |
 | `assets/characters/cat/free_cat_2d_pixel_art/` | Локальная копия пака кота и его лицензия. |
 | `assets/environment/central_city/` | PNG-листы города Central City и описание источника. |
+| `assets/environment/fort_of_illusion/` | CC0-тайлы и пропсы Fort of Illusion для участка Старого квартала. |
 | `assets/collectibles/animated_fish/` | Исходный GIF и шесть PNG-кадров CC0-анимации рыбы. |
 | `assets/audio/music/cybertracks_vol_1/` | Временная музыка первого уровня с условиями кредита в `docs/assets.md`. |
 | `assets/audio/sfx/jdsherbert_ultimate_ui/` | Выбранные OGG-эффекты и оригинальная лицензия UI-пака. |

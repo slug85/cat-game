@@ -1,11 +1,15 @@
 extends Node2D
 
-## Рисует фасады крыш, вентиляционные люки и ворота доставки из листов Central City.
+## Рисует фасады крыш, вентиляционные люки, Старый квартал и ворота доставки.
 ## Коллизии остаются на StaticBody2D и Area2D в сцене level_01.tscn.
 
 const TILES: Texture2D = preload("res://assets/environment/central_city/Tiles.png")
 const PROPS: Texture2D = preload("res://assets/environment/central_city/Props-01.png")
 const BUILDINGS: Texture2D = preload("res://assets/environment/central_city/Buildings.png")
+const FORT_TILES: Texture2D = preload("res://assets/environment/fort_of_illusion/tileset.png")
+const FORT_BANNER: Texture2D = preload("res://assets/environment/fort_of_illusion/banner.png")
+const FORT_WINDOW: Texture2D = preload("res://assets/environment/fort_of_illusion/window.png")
+const FORT_GATE: Texture2D = preload("res://assets/environment/fort_of_illusion/door.png")
 const TILE_SIZE := 16
 const ROOFS := [
 	Rect2(0, 520, 1000, 80),
@@ -26,6 +30,9 @@ const STEAM_VENTS := [
 	Rect2(2468, 496, 144, 24),
 	Rect2(2818, 496, 144, 24),
 ]
+const OLD_QUARTER_FACADE := Rect2(1224, 536, 400, 64)
+const OLD_QUARTER_TILE_SOURCE := Rect2(0, 32, 48, 64)
+const OLD_QUARTER_COLUMN_SOURCE := Rect2(176, 0, 32, 64)
 
 var steam_elapsed := 0.0
 
@@ -45,6 +52,8 @@ func _draw() -> void:
 
 	# Технический блок слегка заходит в покрытие, чтобы его основание не висело над крышей.
 	draw_texture_rect_region(PROPS, Rect2(753, 462, 54, 80), WALL_SOURCE)
+
+	_draw_old_quarter()
 
 	for vent: Rect2 in STEAM_VENTS:
 		_draw_steam_vent(vent)
@@ -69,6 +78,35 @@ func _draw_roof(roof: Rect2) -> void:
 	draw_line(Vector2(roof.position.x, roof.end.y - 8), Vector2(roof.end.x, roof.end.y - 8), Color("554d9f"), 2.0)
 
 
+func _draw_old_quarter() -> void:
+	# Кладка занимает один участок средней крыши: это старый район города, а не замена всей трассы.
+	for x: int in range(int(OLD_QUARTER_FACADE.position.x), int(OLD_QUARTER_FACADE.end.x), 48):
+		var width := minf(48.0, OLD_QUARTER_FACADE.end.x - x)
+		draw_texture_rect_region(
+			FORT_TILES,
+			Rect2(x, OLD_QUARTER_FACADE.position.y, width, OLD_QUARTER_FACADE.size.y),
+			OLD_QUARTER_TILE_SOURCE,
+			Color("9ca1bc")
+		)
+
+	for column_x: float in [1216.0, 1600.0]:
+		draw_texture_rect_region(
+			FORT_TILES,
+			Rect2(column_x, 456, 32, 64),
+			OLD_QUARTER_COLUMN_SOURCE,
+			Color("8f93bd")
+		)
+
+	draw_texture(FORT_WINDOW, Vector2(1332, 460), Color("87a9ef"))
+	draw_texture(FORT_WINDOW, Vector2(1480, 460), Color("87a9ef"))
+
+	# Небольшое покачивание ткани добавляет жизни фону, не влияя на геометрию уровня.
+	var banner_sway := sin(steam_elapsed * 2.0) * 0.04
+	draw_set_transform(Vector2(1570, 458), banner_sway)
+	draw_texture(FORT_BANNER, Vector2(-24, 0), Color("d27cb5"))
+	draw_set_transform(Vector2.ZERO)
+
+
 func _draw_steam_vent(vent: Rect2) -> void:
 	# Вентиляционная решётка встроена в плоскость крыши, без выступающей трубы.
 	var grate := Rect2(vent.get_center().x - 30, vent.end.y - 14, 60, 14)
@@ -90,13 +128,8 @@ func _draw_steam_vent(vent: Rect2) -> void:
 
 
 func _draw_finish_gate() -> void:
-	# Портал «пункта передачи»: визуально это проход, а не стена, поэтому кот бежит сквозь него.
-	var opening := Rect2(2974, 392, 52, 128)
-	draw_rect(opening, Color("11243d"))
-	draw_rect(Rect2(2962, 376, 14, 144), Color("38245e"))
-	draw_rect(Rect2(3026, 376, 14, 144), Color("38245e"))
-	draw_texture_rect_region(PROPS, Rect2(2958, 376, 22, 144), WALL_SOURCE, Color("5e55d7"))
-	draw_texture_rect_region(PROPS, Rect2(3022, 376, 22, 144), WALL_SOURCE, Color("5e55d7"), true)
-	draw_line(Vector2(2962, 380), Vector2(3040, 380), Color("69f5d0"), 5.0)
-	draw_line(Vector2(2974, 398), Vector2(3026, 398), Color("c2fff2"), 2.0)
-	draw_string(ThemeDB.fallback_font, Vector2(2983, 390), "GO", HORIZONTAL_ALIGNMENT_LEFT, -1, 12, Color("69f5d0"))
+	# Открытая каменная арка — пункт передачи. Она лишь визуальна: кот бежит через проём.
+	draw_circle(Vector2(3000, 477), 61, Color("6a59e8", 0.12))
+	draw_texture(FORT_GATE, Vector2(2952, 440), Color("aaa8d9"))
+	draw_line(Vector2(2962, 512), Vector2(3038, 512), Color("72f5d5"), 3.0)
+	draw_string(ThemeDB.fallback_font, Vector2(2973, 432), "ПОЧТА", HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color("ffd56a"))
